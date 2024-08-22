@@ -1,0 +1,34 @@
+    app:
+        name: Etcd
+        code: etcd
+        notify: appzdev@cloudbourne.co
+
+    build:
+        version: 3.5
+        env: DEV
+        build_file: none
+        output_files: output/*.zip
+        image_template: etcd:3.5.5
+
+    deploy:
+        context: alpha/DEV
+        type: statefulset
+        replicas: 1
+        resources: x-large
+        ingress: none
+        port:
+        - 2379
+
+    volumes:
+      - claim: etcd-data
+        mount: /var/lib/etcd
+        name: data
+        size: 5Gi
+      - claim: mysql-backup
+        mount: /appz/backup
+        name: backup
+        size: 5Gi
+
+    properties:
+
+        revision : 25
